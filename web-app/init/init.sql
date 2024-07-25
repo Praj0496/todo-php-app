@@ -1,4 +1,4 @@
-#Initialization Script for MySQL
+
 
 CREATE TABLE IF NOT EXISTS task (
     task_id int(10) PRIMARY KEY,
