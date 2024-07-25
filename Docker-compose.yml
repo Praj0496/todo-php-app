@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   mysql:
-    image: mysql:5.7
+    image: praj0404/mysql-container:1.0
     container_name: mysql-container
     environment:
       MYSQL_ROOT_PASSWORD: my-secret-pw
@@ -12,16 +12,29 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "--silent"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
 
   php:
-    build: .
+    image: praj0404/php-container:1.0
     container_name: php-container
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     networks:
       - my-network
     ports:
       - "80:80"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
 
 networks:
   my-network:

@@ -23,4 +23,3 @@ if (isset($_GET['task_id']) && !empty($_GET['task_id']) && is_numeric($_GET['tas
     die("Invalid task_id");
 }
 ?>
-

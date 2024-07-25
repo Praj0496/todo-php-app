@@ -1,4 +1,3 @@
-
 CREATE TABLE IF NOT EXISTS task (
     task_id int(10) PRIMARY KEY,
     task varchar(250) NOT NULL,
