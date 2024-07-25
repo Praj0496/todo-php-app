@@ -1,0 +1,11 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'php'
+    static_configs:
+      - targets: ['php-app:80']  # Update with the correct port
+
+  - job_name: 'mysql'
+    static_configs:
+      - targets: ['mysql-exporter:9104']  # Default port for mysqld-exporter

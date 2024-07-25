@@ -12,29 +12,50 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./init:/docker-entrypoint-initdb.d
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "--silent"]
-      interval: 10s
-      retries: 5
-      start_period: 30s
-      timeout: 10s
+      - ./logs:/var/log/app
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  mysql-exporter:
+      image: prom/mysqld-exporter
+      environment:
+        DATA_SOURCE_NAME: "root:my-secret-pw@(mysql:3306)/"
+      networks:
+        - my-network
 
   php:
     image: praj0404/php-container:1.0
     container_name: php-container
     depends_on:
-      mysql:
-        condition: service_healthy
+      - mysql
     networks:
       - my-network
     ports:
       - "80:80"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/"]
-      interval: 10s
-      retries: 5
-      start_period: 30s
-      timeout: 10s
+    volumes:
+      - ./logs:/var/log/app
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  prometheus:
+      image: prom/prometheus
+      volumes:
+        - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      ports:
+        - "9090:9090"
+      networks:
+        - my-network
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
 
 networks:
   my-network:
