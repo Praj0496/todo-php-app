@@ -31,7 +31,7 @@ jobs:
           docker build -t my-php-app .
 
       - name: Run Trivy scan
-        uses: aquasecurity/trivy-action@v0.5.0
+        uses: aquasecurity/trivy-action@v0.7.0
         with:
           image-ref: my-php-app
           format: 'table'
