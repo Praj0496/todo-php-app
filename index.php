@@ -33,8 +33,7 @@
 	<tbody>
 		<?php
 				require 'config.php';
-				$fetchingtasks = 
-mysqli_query($db, "SELECT * FROM `task` ORDER BY `task_id` ASC")
+$fetchingtasks = mysqli_query($db, "SELECT * FROM `task` ORDER BY `task_id` ASC")
 or die(mysqli_error($db));
 				$count = 1;
 				while ($fetch = $fetchingtasks->fetch_array()) {
